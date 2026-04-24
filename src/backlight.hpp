@@ -1,13 +1,11 @@
 #ifndef BACKLIGHT_HPP
 #define BACKLIGHT_HPP
 
-#include <memory>
 #include <widget.hpp>
-#include <gtk-utils.hpp>
+#include <gtkmm/button.h>
 
 extern "C" {
 #include "backlight.h"
-#include "brightness.h"
 }
 
 static constexpr conf_table_t conf_table[] = {
@@ -16,11 +14,12 @@ static constexpr conf_table_t conf_table[] = {
 
 class WayfireBacklight : public WayfireWidget
 {
-  std::unique_ptr <Gtk::HBox> plugin;
+  std::unique_ptr <Gtk::Button> plugin;
   BacklightPlugin *backlight = nullptr;
 
   public:
     void init(Gtk::HBox *container) override;
+    bool set_icon (void);
     virtual ~WayfireBacklight ();
 };
 

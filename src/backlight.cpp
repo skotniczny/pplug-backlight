@@ -1,6 +1,10 @@
 #include "backlight.hpp"
 
 extern "C" {
+#include "brightness.h"
+}
+
+extern "C" {
   WayfireWidget *create() { return new WayfireBacklight; }
   void destroy (WayfireWidget *w) { delete w; }
 
@@ -14,13 +18,20 @@ void WayfireBacklight::init(Gtk::HBox *container)
   if (!find_backlight_path())
     return;
 
-  plugin = std::make_unique<Gtk::HBox>();
+  plugin = std::make_unique<Gtk::Button>();
   plugin->set_name(PLUGIN_NAME);
   container->pack_start(*plugin, false, false);
 
   backlight = g_new0(BacklightPlugin, 1);
   backlight->plugin = (GtkWidget*)((*plugin).gobj());
   backlight_init(backlight);
+}
+
+bool WayfireBacklight::set_icon()
+{
+  if (backlight)
+    backlight_update_icon(backlight);
+  return false;
 }
 
 WayfireBacklight::~WayfireBacklight()
