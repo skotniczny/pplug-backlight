@@ -15,8 +15,7 @@ extern "C" {
 
 void WayfireBacklight::init(Gtk::HBox *container)
 {
-  if (!find_backlight_path())
-    return;
+  if (!find_brightness_dir()) return;
 
   plugin = std::make_unique<Gtk::Button>();
   plugin->set_name(PLUGIN_NAME);
