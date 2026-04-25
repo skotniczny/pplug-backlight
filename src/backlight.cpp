@@ -22,7 +22,7 @@ void WayfireBacklight::init(Gtk::HBox *container)
   container->pack_start(*plugin, false, false);
 
   backlight = g_new0(BacklightPlugin, 1);
-  backlight->plugin = (GtkWidget*)((*plugin).gobj());
+  backlight->plugin = GTK_WIDGET(plugin->gobj());
   backlight_init(backlight);
 }
 
@@ -38,4 +38,3 @@ WayfireBacklight::~WayfireBacklight()
   if (backlight)
     backlight_destructor(backlight);
 }
-
