@@ -1,5 +1,4 @@
 #include <stdio.h>
-#include <dirent.h>
 
 #include <glib/gi18n.h>
 #include "brightness.h"
@@ -9,16 +8,11 @@
 static char *brightness_dir = NULL;
 
 gboolean find_brightness_dir(void) {
-  DIR *dir;
-  struct dirent *entry;
-  if ((dir = opendir(BRIGHTNESS_PATH))) {
-    while ((entry = readdir(dir))) {
-      if (entry->d_name[0] != '.') {
-        brightness_dir = g_build_filename(BRIGHTNESS_PATH, entry->d_name, NULL);
-        break;
-      }
-    }
-    closedir(dir);
+  GDir *dir = g_dir_open(BRIGHTNESS_PATH, 0, NULL);
+  if (dir) {
+    const char *name = g_dir_read_name(dir);
+    if (name) brightness_dir = g_build_filename(BRIGHTNESS_PATH, name, NULL);
+    g_dir_close(dir);
   }
   return brightness_dir != NULL;
 }
