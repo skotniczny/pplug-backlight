@@ -26,6 +26,7 @@ static void brightness_slider_changed(GtkRange *range, BacklightPlugin *bl) {
 }
 
 static void popup_window_show(BacklightPlugin *bl) {
+  backlight_update_icon(bl);
   bl->popup_window = gtk_window_new(GTK_WINDOW_TOPLEVEL);
   gtk_widget_set_name(bl->popup_window, "panelpopup");
 
