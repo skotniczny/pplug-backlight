@@ -1,0 +1,13 @@
+<?xml version="1.0"?>
+<wf-panel-pi>
+  <plugin name="panel">
+  <_short>Panel</_short>
+  <group>
+  <_short>Brightness</_short>
+  <option name="backlight_min_brightness" type="int">
+    <_short>Minimum brightness (0-100%)</_short>
+    <default>5</default>
+  </option>
+  </group>
+  </plugin>
+</wf-panel-pi>

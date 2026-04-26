@@ -8,18 +8,19 @@ extern "C" {
 #include "backlight.h"
 }
 
-static constexpr conf_table_t conf_table[] = {
-  {CONF_TYPE_NONE, NULL, NULL, NULL}
-};
-
 class WayfireBacklight : public WayfireWidget
 {
   std::unique_ptr <Gtk::Button> plugin;
+
+  WfOption <int> min_brightness {"panel/backlight_min_brightness"};
+
   BacklightPlugin *backlight = nullptr;
 
   public:
     void init(Gtk::HBox *container) override;
     bool set_icon (void);
+    void read_settings(void);
+    void settings_changed_cb(void);
     virtual ~WayfireBacklight ();
 };
 

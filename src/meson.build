@@ -20,3 +20,7 @@ shared_module('lib' + meson.project_name(), wsources,
   name_prefix: '',
 )
 
+metadata = files(
+  'backlight.xml'
+)
+install_data(metadata, install_dir: metadata_dir)

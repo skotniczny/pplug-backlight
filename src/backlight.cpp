@@ -13,6 +13,17 @@ extern "C" {
   const char *package_name(void) { return GETTEXT_PACKAGE; }
 }
 
+void WayfireBacklight::read_settings(void) {
+  if (!backlight) return;
+  backlight->min_brightness = CLAMP((int) min_brightness, 0, 100);
+}
+
+void WayfireBacklight::settings_changed_cb(void) {
+  if (!backlight) return;
+  read_settings();
+  backlight_update_slider(backlight);
+}
+
 void WayfireBacklight::init(Gtk::HBox *container)
 {
   if (!find_brightness_dir()) return;
@@ -23,7 +34,13 @@ void WayfireBacklight::init(Gtk::HBox *container)
 
   backlight = g_new0(BacklightPlugin, 1);
   backlight->plugin = GTK_WIDGET(plugin->gobj());
+
+  /* Initialise the plugin */
+  read_settings();
   backlight_init(backlight);
+
+  /* Setup callbacks */
+  min_brightness.set_callback(sigc::mem_fun(*this, &WayfireBacklight::settings_changed_cb));
 }
 
 bool WayfireBacklight::set_icon()

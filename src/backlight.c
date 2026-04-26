@@ -1,7 +1,17 @@
 #include <gtk/gtk.h>
+#include <glib/gi18n.h>
+#include "lxutils.h"
 #include "backlight.h"
 #include "brightness.h"
-#include "lxutils.h"
+
+/*----------------------------------------------------------------------------*/
+/* Global data                                                                */
+/*----------------------------------------------------------------------------*/
+
+conf_table_t conf_table[2] = {
+  {CONF_TYPE_INT, "min_brightness", N_("Minimum brightness (0-100%)"), NULL },
+  {CONF_TYPE_NONE, NULL, NULL, NULL}
+};
 
 /*----------------------------------------------------------------------------*/
 /* Brightness popup window                                                    */
@@ -30,7 +40,7 @@ static void popup_window_show(BacklightPlugin *bl) {
   bl->popup_window = gtk_window_new(GTK_WINDOW_TOPLEVEL);
   gtk_widget_set_name(bl->popup_window, "panelpopup");
 
-  bl->slider = gtk_scale_new_with_range(GTK_ORIENTATION_VERTICAL, 0, 100, 1);
+  bl->slider = gtk_scale_new_with_range(GTK_ORIENTATION_VERTICAL, bl->min_brightness, 100, 1);
   g_object_set(bl->slider, "height-request", 120, NULL);
   gtk_scale_set_draw_value(GTK_SCALE(bl->slider), FALSE);
   gtk_range_set_inverted(GTK_RANGE(bl->slider), TRUE);
@@ -63,6 +73,12 @@ static void button_clicked(GtkWidget *, BacklightPlugin *bl) {
 void backlight_update_icon(BacklightPlugin *bl) {
   int actual = get_actual_brightness();
   wrap_set_taskbar_icon(bl, bl->tray_icon, icon_for_level(actual));
+}
+
+void backlight_update_slider(BacklightPlugin *bl) {
+  if (bl->slider) {
+    gtk_range_set_range(GTK_RANGE(bl->slider), bl->min_brightness, 100);
+  }
 }
 
 void backlight_init(BacklightPlugin *bl) {
